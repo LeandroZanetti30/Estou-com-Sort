@@ -1,0 +1,12 @@
+Algoritmo utilizado: Insertion Sort
+Vetor original: [16, 25, 68]
+Vetor ordenado: [16, 25, 68]
+
+Tempo teórico: O(n²)
+Espaço: O(1)
+In-situ: Sim
+Estável: Sim
+Tempo de execução: 7.65 segundos
+
+Explicação do algoritmo:
+Insertion Sort (Ordenação por Inserção) é um algoritmo simples que constrói a sequência ordenada um item de cada vez. Ele é eficiente para conjuntos de dados pequenos ou quase ordenados. Funciona como muitas pessoas ordenam cartas em um jogo de baralho - pega cada elemento e insere na posição correta entre os elementos já ordenados.Complexidade:- Pior caso: O(n²) - quando o vetor está em ordem inversa- Melhor caso: O(n) - quando o vetor já está ordenado- Caso médio: O(n²)Características:- Estável: mantém a ordem de elementos iguais- In-situ: requer apenas uma quantidade constante de espaço adicional- Adaptável: se beneficia de vetores parcialmente ordenados

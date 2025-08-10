@@ -1,0 +1,22 @@
+digraph InsertionSort {
+	rankdir=TB
+	A [label="Início"]
+	B [label="Para i de 1 até n-1"]
+	C [label="Chave = A[i]"]
+	D [label="j = i - 1"]
+	E [label="Enquanto j >= 0 e A[j] > chave"]
+	F [label="A[j+1] = A[j]"]
+	G [label="j = j - 1"]
+	H [label="A[j+1] = chave"]
+	I [label=Fim]
+	A -> B
+	B -> C
+	C -> D
+	D -> E
+	E -> F [label=Sim]
+	F -> G
+	G -> E
+	E -> H [label="Não"]
+	H -> B
+	B -> I
+}

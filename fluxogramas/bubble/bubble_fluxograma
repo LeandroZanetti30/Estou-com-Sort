@@ -1,0 +1,16 @@
+digraph BubbleSort {
+	rankdir=TB
+	A [label="Início"]
+	B [label="Para i de 0 até n-1"]
+	C [label="Para j de 0 até n-i-1"]
+	D [label="Se A[j] > A[j+1]"]
+	E [label="Trocar A[j] e A[j+1]"]
+	F [label=Fim]
+	A -> B
+	B -> C
+	C -> D
+	D -> E [label=Sim]
+	D -> C [label="Não" style=dashed]
+	E -> C
+	C -> F
+}

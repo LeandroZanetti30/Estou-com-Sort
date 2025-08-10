@@ -1,0 +1,17 @@
+digraph MergeSort {
+	rankdir=TB
+	A [label="Início"]
+	B [label="Se tamanho da lista > 1"]
+	C [label="Dividir lista em esquerda e direita"]
+	D [label="MergeSort(esquerda)"]
+	E [label="MergeSort(direita)"]
+	F [label="Mesclar listas ordenadas"]
+	G [label=Fim]
+	A -> B
+	B -> C [label=Sim]
+	B -> G [label="Não"]
+	C -> D
+	D -> E
+	E -> F
+	F -> G
+}

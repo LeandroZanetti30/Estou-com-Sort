@@ -1,0 +1,15 @@
+digraph QuickSort {
+	rankdir=TB
+	A [label="Início"]
+	B [label="Se início < fim"]
+	C [label="p = partição(A, início, fim)"]
+	D [label="QuickSort(A, início, p-1)"]
+	E [label="QuickSort(A, p+1, fim)"]
+	F [label=Fim]
+	A -> B
+	B -> C [label=Sim]
+	B -> F [label="Não"]
+	C -> D
+	D -> E
+	E -> F
+}
