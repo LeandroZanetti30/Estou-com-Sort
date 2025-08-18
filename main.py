@@ -38,8 +38,8 @@ class SortingVisualizer:
         self.algorithm_buttons = create_algorithm_buttons(self.sort_with_timer)
         
         # Control buttons
-        self.pause_button = Button("⏸ Pausar", WIDTH-250, 20, 100, 40, self.toggle_pause)
-        self.step_button = Button("⏭ Passo", WIDTH-140, 20, 100, 40, self.do_step)
+        #self.pause_button = Button("⏸ Pausar", WIDTH-250, 20, 100, 40, self.toggle_pause)
+        #self.step_button = Button("⏭ Passo", WIDTH-140, 20, 100, 40, self.do_step)
 
     def switch_screen(self, screen_name):
         self.current_screen = screen_name
@@ -146,11 +146,22 @@ class SortingVisualizer:
                 draw_menu_screen(self.screen, self.menu_buttons)
                 
             elif self.current_screen == INPUT_SCREEN:
-                draw_input_screen(self.screen, self.input_text, self.error_message, [
-                    Button("Confirmar", WIDTH//2 - 150, 300, 300, 50, lambda: None, (100, 149, 237)),
-                    Button("Gerar Aleatório", WIDTH//2 - 150, 370, 300, 50, lambda: None, (60, 179, 113)),
-                    self.back_button
-                ])
+                # Desenha a tela de input (apenas com campo de texto e botão Confirmar)
+                draw_input_screen(self.screen, self.input_text, self.error_message, self.back_button)
+                
+                # Tratamento de eventos
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        self.quit_app()
+                    
+                    # Atualiza o input_text e verifica cliques
+                    self.input_text, self.vector, self.error_message, _ = handle_input_screen_events(
+                        event,  # Passa o evento individual
+                        self.input_text, 
+                        self.vector, 
+                        self.switch_screen, 
+                        self.back_button
+                    )
                 
             elif self.current_screen == SIZE_SELECTION_SCREEN:
                 size_buttons = [
@@ -166,9 +177,9 @@ class SortingVisualizer:
                 )
                 
                 # Draw control buttons if sorting is active
-                if self.sorting_active:
-                    self.pause_button.draw(self.screen)
-                    self.step_button.draw(self.screen)
+                #if self.sorting_active:
+                #    self.pause_button.draw(self.screen)
+                #    self.step_button.draw(self.screen)
                 
                 # Execute sorting step by step
 # Dentro do método run(), onde executa o algoritmo:
@@ -238,9 +249,9 @@ class SortingVisualizer:
                         for btn in self.algorithm_buttons:
                             btn.check_click(event)
                     
-                    if self.sorting_active:
-                        self.pause_button.check_click(event)
-                        self.step_button.check_click(event)
+                    #if self.sorting_active:
+                    #    self.pause_button.check_click(event)
+                    #    self.step_button.check_click(event)
                 
                 elif self.current_screen == ABOUT_SCREEN:
                     self.back_button.check_click(event)
