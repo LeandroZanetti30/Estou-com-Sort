@@ -21,7 +21,7 @@ SIZE_SELECTION_SCREEN = "size_selection"
 
 # Configurações de ordenação
 MIN_VECTOR_SIZE = 2
-MAX_VECTOR_SIZE = 20
+MAX_VECTOR_SIZE = 10
 DEFAULT_SPEED = 1100  # ms
 MIN_SPEED = 50
 SPEED_STEP = 50

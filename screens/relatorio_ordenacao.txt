@@ -1,22 +1,22 @@
-Algoritmo utilizado: Selection Sort
-Vetor original: [41, 60]
-Vetor ordenado: [41, 60]
+Algoritmo utilizado: Merge Sort
+Vetor original: [2, 1]
+Vetor ordenado: [1, 2]
 
-Tempo teórico: O(n²)
-Espaço: O(1)
-In-situ: Sim
-Estável: Não
-Tempo de execução: 5.44 segundos
+Tempo teórico: O(n log n)
+Espaço: O(n)
+In-situ: Não
+Estável: Sim
+Tempo de execução: 7.65 segundos
 
 Explicação do algoritmo:
-Selection Sort (Ordenação por Seleção) divide o vetor em duas partes: uma sublista ordenada e uma sublista não ordenada. A cada iteração, ele encontra o menor elemento na sublista não ordenada e o troca com o primeiro elemento da sublista não ordenada.
+Merge Sort (Ordenação por Mistura) é um algoritmo eficiente que também usa 'dividir para conquistar'. Ele divide o vetor em duas metades, ordena cada metade recursivamente e depois combina (merge) as duas metades ordenadas.
 
 Complexidade:
-- Pior caso: O(n²)
-- Melhor caso: O(n²)
-- Caso médio: O(n²)
+- Pior caso: O(n log n)
+- Melhor caso: O(n log n)
+- Caso médio: O(n log n)
 
 Características:
-- Não é estável: pode alterar a ordem de elementos iguais
-- In-situ: requer apenas uma quantidade constante de espaço adicional
-- Poucas trocas: no máximo n trocas (útil quando trocas são custosas)
+- Estável: mantém a ordem de elementos iguais
+- Não é in-situ: requer espaço adicional O(n)
+- Excelente para ordenar listas encadeadas e arquivos grandes

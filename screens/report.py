@@ -76,7 +76,7 @@ def gerar_explicacao(name):
     }
     return explicacoes.get(name, "Explicação não disponível para este algoritmo.")
 
-def show_report(surface, name, tempo, espaco, insitu, estavel, vector, resultado, exec_time, switch_screen, save_report_func):
+def show_report(surface, name, tempo, espaco, insitu, estavel, vetor_original, vetor_ordenado, exec_time, switch_screen, save_report_func):
     # Tela de fundo
     surface.fill(BACKGROUND_COLOR)
     pygame.draw.rect(surface, (70, 130, 180), (0, 0, WIDTH, 80))
@@ -94,12 +94,12 @@ def show_report(surface, name, tempo, espaco, insitu, estavel, vector, resultado
     draw_text(surface, f"Estável: {estavel}", (80, 250))
     draw_text(surface, f"Tempo de execução: {exec_time:.4f} segundos", (80, 280))
     
-    # Visualização do resultado
-    bar_width = (WIDTH - 500) // len(resultado)
-    max_val = max(resultado) if resultado else 1
+    # Visualização do vetor_ordenado
+    bar_width = (WIDTH - 500) // len(vetor_ordenado)
+    max_val = max(vetor_ordenado) if vetor_ordenado else 1
     base_y = HEIGHT - 200
     
-    for i, val in enumerate(resultado):
+    for i, val in enumerate(vetor_ordenado):
         x = 450 + i * bar_width
         height = (val / max_val) * 200
         y = base_y - height
@@ -115,14 +115,14 @@ def show_report(surface, name, tempo, espaco, insitu, estavel, vector, resultado
     
     # Botão
     save_and_exit_btn = Button("Salvar e Voltar ao Menu", WIDTH//2 - 150, HEIGHT - 100, 300, 50, 
-                             lambda: [save_report_func(name, tempo, espaco, insitu, estavel, vector, resultado, exec_time),
+                             lambda: [save_report_func(name, tempo, espaco, insitu, estavel, vetor_original, vetor_ordenado, exec_time),
                                       switch_screen(MENU_SCREEN)],
                              (76, 175, 80))
     save_and_exit_btn.draw(surface)
     
     return save_and_exit_btn
 
-def save_report(name, tempo, espaco, insitu, estavel, vector, resultado, exec_time):
+def save_report(name, tempo, espaco, insitu, estavel, vetor_original, vetor_ordenado, exec_time):
     import sys
     from pathlib import Path
     
@@ -136,8 +136,8 @@ def save_report(name, tempo, espaco, insitu, estavel, vector, resultado, exec_ti
         
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(f"Algoritmo utilizado: {name}\n")
-            f.write(f"Vetor original: {vector}\n")
-            f.write(f"Vetor ordenado: {resultado}\n\n")
+            f.write(f"Vetor original: {vetor_original}\n")
+            f.write(f"Vetor ordenado: {vetor_ordenado}\n\n")
             f.write(f"Tempo teórico: {tempo}\n")
             f.write(f"Espaço: {espaco}\n")
             f.write(f"In-situ: {insitu}\n")

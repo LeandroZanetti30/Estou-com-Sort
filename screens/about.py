@@ -24,8 +24,9 @@ def draw_about_screen(surface, back_button):
         "- Interface interativa e intuitiva",
         "",
         "Desenvolvido por: Leandro Marcos Mendes Zanetti",
-        "Orientador: [Nome do Orientador]",
-        "Instituição: UFOP",
+        "Orientador: Prof. Dr. Rafael Alves Bonfim de Queiroz",
+        "Instituição: Universidade Federal de Ouro Preto - UFOP",
+        "DECOM: Departamento de Computação"
         "Ano: 2025"
     ]
     

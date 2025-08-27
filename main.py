@@ -93,7 +93,9 @@ class SortingVisualizer:
         self.algorithm_name = name
         self.sorting_active = True
         self.sorting_done = False
-        self.current_explanation = f"Iniciando {name}..."
+        
+        # SALVA UMA CÓPIA do vetor original ANTES de ordenar
+        vetor_original = self.vector.copy()
         
         algorithm_map = {
             "Insertion Sort": insertion_sort,
@@ -108,18 +110,19 @@ class SortingVisualizer:
             return
         
         self.sorting_generator = sort_func(
-            self.vector.copy(), 
+            self.vector.copy(),  # Trabalha com uma cópia
             self.screen, 
             self.update_explanation, 
             self.wait
         )
         
         self.sorting_start_time = time.time()
+        self.vetor_original = vetor_original  # Guarda o original
 
-    def show_report(self, name, tempo, espaco, insitu, estavel, resultado, exec_time):
+    def show_report(self, name, tempo, espaco, insitu, estavel, vetor_original ,vetor_ordenado, exec_time):
         save_and_exit_btn = show_report(
             self.screen, name, tempo, espaco, insitu, estavel, 
-            self.vector, resultado, exec_time, self.switch_screen, save_report
+            vetor_original, vetor_ordenado, exec_time, self.switch_screen, save_report
         )
         
         waiting = True
@@ -200,7 +203,8 @@ class SortingVisualizer:
                             "O(1)" if self.algorithm_name != "Merge Sort" else "O(n)",
                             "Não" if self.algorithm_name == "Merge Sort" else "Sim",
                             "Não" if self.algorithm_name in ["Selection Sort", "Quick Sort"] else "Sim",
-                            self.vector,
+                            self.vetor_original,  # Original
+                            self.vector,          # Ordenado,          # Ordenado
                             duration
                         )
                 
