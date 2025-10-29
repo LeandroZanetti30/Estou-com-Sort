@@ -76,7 +76,7 @@ def gerar_explicacao(name):
     }
     return explicacoes.get(name, "Explicação não disponível para este algoritmo.")
 
-def show_report(surface, name, tempo, espaco, insitu, estavel, vetor_original, vetor_ordenado, exec_time, switch_screen, save_report_func):
+def show_report(surface, name, tempo, espaco, insitu, estavel, vetor_original, vetor_ordenado, exec_time, comparisons, swaps, switch_screen, save_report_func):
     # Tela de fundo
     surface.fill(BACKGROUND_COLOR)
     pygame.draw.rect(surface, (70, 130, 180), (0, 0, WIDTH, 80))
@@ -93,6 +93,8 @@ def show_report(surface, name, tempo, espaco, insitu, estavel, vetor_original, v
     draw_text(surface, f"In-situ: {insitu}", (80, 220))
     draw_text(surface, f"Estável: {estavel}", (80, 250))
     draw_text(surface, f"Tempo de execução: {exec_time:.4f} segundos", (80, 280))
+    draw_text(surface, f"Comparações realizadas: {comparisons}", (80, 310))
+    draw_text(surface, f"Trocas realizadas: {swaps}", (80, 340))
     
     # Visualização do vetor_ordenado
     bar_width = (WIDTH - 500) // len(vetor_ordenado)
@@ -108,21 +110,21 @@ def show_report(surface, name, tempo, espaco, insitu, estavel, vetor_original, v
             draw_text(surface, str(val), (x + bar_width//2, y - 25), size="tiny", center=True)
     
     # Explicação
-    pygame.draw.rect(surface, (240, 240, 240), (80, 320, WIDTH-160, HEIGHT-420), border_radius=BORDER_RADIUS)
-    pygame.draw.rect(surface, (200, 200, 200), (80, 320, WIDTH-160, HEIGHT-420), 1, border_radius=BORDER_RADIUS)
-    draw_text(surface, "Explicação do Algoritmo:", (100, 340), size="medium")
-    draw_text(surface, gerar_explicacao(name), (100, 380), size="small", wrap_width=WIDTH-180)
+    pygame.draw.rect(surface, (240, 240, 240), (80, 370, WIDTH-160, HEIGHT-470), border_radius=BORDER_RADIUS)
+    pygame.draw.rect(surface, (200, 200, 200), (80, 370, WIDTH-160, HEIGHT-470), 1, border_radius=BORDER_RADIUS)
+    draw_text(surface, "Explicação do Algoritmo:", (100, 390), size="medium")
+    draw_text(surface, gerar_explicacao(name), (100, 430), size="small", wrap_width=WIDTH-180)
     
     # Botão
     save_and_exit_btn = Button("Salvar e Voltar ao Menu", WIDTH//2 - 150, HEIGHT - 100, 300, 50, 
-                             lambda: [save_report_func(name, tempo, espaco, insitu, estavel, vetor_original, vetor_ordenado, exec_time),
+                             lambda: [save_report_func(name, tempo, espaco, insitu, estavel, vetor_original, vetor_ordenado, exec_time, comparisons, swaps),
                                       switch_screen(MENU_SCREEN)],
                              (76, 175, 80))
     save_and_exit_btn.draw(surface)
     
     return save_and_exit_btn
 
-def save_report(name, tempo, espaco, insitu, estavel, vetor_original, vetor_ordenado, exec_time):
+def save_report(name, tempo, espaco, insitu, estavel, vetor_original, vetor_ordenado, exec_time, comparisons, swaps):
     import sys
     from pathlib import Path
     
@@ -142,7 +144,9 @@ def save_report(name, tempo, espaco, insitu, estavel, vetor_original, vetor_orde
             f.write(f"Espaço: {espaco}\n")
             f.write(f"In-situ: {insitu}\n")
             f.write(f"Estável: {estavel}\n")
-            f.write(f"Tempo de execução: {exec_time:.2f} segundos\n\n")
+            f.write(f"Tempo de execução: {exec_time:.2f} segundos\n")
+            f.write(f"Comparações realizadas: {comparisons}\n")
+            f.write(f"Trocas realizadas: {swaps}\n\n")
             f.write("Explicação do algoritmo:\n")
             f.write(gerar_explicacao(name) + "\n")
         

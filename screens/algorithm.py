@@ -22,7 +22,7 @@ def create_algorithm_buttons(sort_with_timer):
               (72, 209, 204)),
     ]
 
-def draw_algorithm_screen(surface, vector, buttons, back_button, sorting_active, sorting_speed):
+def draw_algorithm_screen(surface, vector, buttons, back_button, sorting_active, sorting_speed, comparisons=0, swaps=0):
     surface.fill(BACKGROUND_COLOR)
     
     # Título
@@ -44,3 +44,8 @@ def draw_algorithm_screen(surface, vector, buttons, back_button, sorting_active,
     # Botões de controle
     if sorting_active:
         draw_text(surface, f"Velocidade: {sorting_speed}ms", (WIDTH-550, 30))
+        
+    # Mostra contadores de comparações e trocas durante a ordenação
+    if sorting_active:
+        draw_text(surface, f"Comparações: {comparisons}", (WIDTH-550, 60))
+        draw_text(surface, f"Trocas: {swaps}", (WIDTH-550, 90))

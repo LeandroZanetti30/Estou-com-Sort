@@ -31,6 +31,8 @@ class SortingVisualizer:
         self.error_message = ""
         self.sorting_generator = None
         self.sorting_done = False
+        self.comparisons = 0
+        self.swaps = 0
         
         # Initialize buttons
         self.back_button = Button("← Voltar", 20, 20, 120, 40, self.switch_screen_menu)
@@ -45,6 +47,8 @@ class SortingVisualizer:
         self.current_screen = screen_name
         self.sorting_active = False
         self.sorting_generator = None
+        self.comparisons = 0
+        self.swaps = 0
         if screen_name != ALGORITHM_SCREEN:
             self.current_explanation = ""
 
@@ -89,10 +93,16 @@ class SortingVisualizer:
     def update_explanation(self, text):
         self.current_explanation = text
 
+    def update_counters(self, comparisons, swaps):
+        self.comparisons = comparisons
+        self.swaps = swaps
+
     def sort_with_timer(self, name, tempo, espaco, insitu, estavel):
         self.algorithm_name = name
         self.sorting_active = True
         self.sorting_done = False
+        self.comparisons = 0
+        self.swaps = 0
         
         # SALVA UMA CÓPIA do vetor original ANTES de ordenar
         vetor_original = self.vector.copy()
@@ -113,7 +123,8 @@ class SortingVisualizer:
             self.vector.copy(),  # Trabalha com uma cópia
             self.screen, 
             self.update_explanation, 
-            self.wait
+            self.wait,
+            self.update_counters
         )
         
         self.sorting_start_time = time.time()
@@ -122,7 +133,8 @@ class SortingVisualizer:
     def show_report(self, name, tempo, espaco, insitu, estavel, vetor_original ,vetor_ordenado, exec_time):
         save_and_exit_btn = show_report(
             self.screen, name, tempo, espaco, insitu, estavel, 
-            vetor_original, vetor_ordenado, exec_time, self.switch_screen, save_report
+            vetor_original, vetor_ordenado, exec_time, self.comparisons, self.swaps,
+            self.switch_screen, save_report
         )
         
         waiting = True
@@ -176,7 +188,8 @@ class SortingVisualizer:
             elif self.current_screen == ALGORITHM_SCREEN:
                 draw_algorithm_screen(
                     self.screen, self.vector, self.algorithm_buttons, 
-                    self.back_button, self.sorting_active, self.sorting_speed
+                    self.back_button, self.sorting_active, self.sorting_speed,
+                    self.comparisons, self.swaps
                 )
                 
                 # Draw control buttons if sorting is active
@@ -185,7 +198,6 @@ class SortingVisualizer:
                 #    self.step_button.draw(self.screen)
                 
                 # Execute sorting step by step
-# Dentro do método run(), onde executa o algoritmo:
                 if self.sorting_active and not self.sorting_done and not self.paused:
                     try:
                         self.vector = next(self.sorting_generator)
@@ -204,7 +216,7 @@ class SortingVisualizer:
                             "Não" if self.algorithm_name == "Merge Sort" else "Sim",
                             "Não" if self.algorithm_name in ["Selection Sort", "Quick Sort"] else "Sim",
                             self.vetor_original,  # Original
-                            self.vector,          # Ordenado,          # Ordenado
+                            self.vector,          # Ordenado
                             duration
                         )
                 
