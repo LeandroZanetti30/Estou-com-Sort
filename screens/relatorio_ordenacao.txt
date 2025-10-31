@@ -1,24 +1,26 @@
-Algoritmo utilizado: Selection Sort
-Vetor original: [45, 49]
-Vetor ordenado: [45, 49]
+Algoritmo utilizado: Smooth Sort
+Vetor original: [79, 1]
+Vetor ordenado: [1, 79]
 
-Tempo teórico: O(n²)
+Tempo teórico: O(n log n)
 Espaço: O(1)
 In-situ: Sim
 Estável: Não
-Tempo de execução: 5.45 segundos
+Tempo de execução: 6.55 segundos
 Comparações realizadas: 1
-Trocas realizadas: 0
+Trocas realizadas: 1
 
 Explicação do algoritmo:
-Selection Sort (Ordenação por Seleção) divide o vetor em duas partes: uma sublista ordenada e uma sublista não ordenada. A cada iteração, ele encontra o menor elemento na sublista não ordenada e o troca com o primeiro elemento da sublista não ordenada.
+Smooth Sort é um algoritmo de ordenação adaptativo desenvolvido por Edsger Dijkstra. É uma variação do Heap Sort que usa uma sequência de números de Leonardo para criar uma floresta de heaps, tornando-o mais eficiente para dados parcialmente ordenados.
 
 Complexidade:
-- Pior caso: O(n²)
-- Melhor caso: O(n²)
-- Caso médio: O(n²)
+- Pior caso: O(n log n)
+- Melhor caso: O(n) - quando os dados já estão ordenados
+- Caso médio: O(n log n)
 
 Características:
 - Não é estável: pode alterar a ordem de elementos iguais
 - In-situ: requer apenas uma quantidade constante de espaço adicional
-- Poucas trocas: no máximo n trocas (útil quando trocas são custosas)
+- Adaptável: mais eficiente com dados parcialmente ordenados
+- Baseado em números de Leonardo (L(0)=1, L(1)=1, L(n)=L(n-1)+L(n-2)+1)
+- Complexidade de caso ideal O(n) quando a entrada está quase ordenada

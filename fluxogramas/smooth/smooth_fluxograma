@@ -1,0 +1,19 @@
+digraph SmoothSort {
+	rankdir=TB
+	A [label="Início"]
+	B [label="Construir sequência de heaps de Leonardo"]
+	C [label="Para i de n-1 até 1"]
+	D [label="Trocar A[0] com A[i]"]
+	E [label="Reduzir tamanho do heap"]
+	F [label="Restaurar propriedade de heap de Leonardo"]
+	G [label="Mais elementos a ordenar?"]
+	H [label=Fim]
+	A -> B
+	B -> C
+	C -> D
+	D -> E
+	E -> F
+	F -> G
+	G -> C [label=Sim]
+	G -> H [label="Não" style=dashed]
+}

@@ -1,0 +1,4 @@
+scenario,success_mean,time_mean,time_std,events_mean,runs
+Abrir app e clicar no menu inicial,1.0,2.24,0.0,2.0,1
+Abrir app e aguardar 3 segundos,1.0,2.001,0.0,2.0,1
+Abrir app e fechar rapidamente,1.0,2.001,0.0,2.0,1

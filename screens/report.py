@@ -73,6 +73,36 @@ def gerar_explicacao(name):
             "- Não é in-situ: requer espaço adicional O(n)\n"
             "- Excelente para ordenar listas encadeadas e arquivos grandes"
         ),
+         "Bucket Sort": (
+            "Bucket Sort (Ordenação por Baldes) é um algoritmo de ordenação que funciona distribuindo os elementos "
+            "em vários baldes (buckets), ordenando cada balde individualmente (geralmente com outro algoritmo "
+            "de ordenação), e depois concatenando todos os baldes.\n\n"
+            "Complexidade:\n"
+            "- Pior caso: O(n²) - quando todos elementos caem no mesmo balde\n"
+            "- Melhor caso: O(n + k) - quando elementos estão uniformemente distribuídos\n"
+            "- Caso médio: O(n + k)\n\n"
+            "Características:\n"
+            "- Estável: mantém a ordem de elementos iguais\n"
+            "- Não é in-situ: requer espaço adicional O(n + k)\n"
+            "- Eficiente quando a entrada está uniformemente distribuída\n"
+            "- Funciona bem com dados distribuídos uniformemente em um intervalo\n"
+            "- k representa o número de baldes utilizados"
+        ),
+         "Smooth Sort": (
+            "Smooth Sort é um algoritmo de ordenação adaptativo desenvolvido por Edsger Dijkstra. "
+            "É uma variação do Heap Sort que usa uma sequência de números de Leonardo para criar "
+            "uma floresta de heaps, tornando-o mais eficiente para dados parcialmente ordenados.\n\n"
+            "Complexidade:\n"
+            "- Pior caso: O(n log n)\n"
+            "- Melhor caso: O(n) - quando os dados já estão ordenados\n"
+            "- Caso médio: O(n log n)\n\n"
+            "Características:\n"
+            "- Não é estável: pode alterar a ordem de elementos iguais\n"
+            "- In-situ: requer apenas uma quantidade constante de espaço adicional\n"
+            "- Adaptável: mais eficiente com dados parcialmente ordenados\n"
+            "- Baseado em números de Leonardo (L(0)=1, L(1)=1, L(n)=L(n-1)+L(n-2)+1)\n"
+            "- Complexidade de caso ideal O(n) quando a entrada está quase ordenada"
+        ),
     }
     return explicacoes.get(name, "Explicação não disponível para este algoritmo.")
 

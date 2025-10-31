@@ -1,0 +1,19 @@
+digraph BucketSort {
+	rankdir=TB
+	A [label="Início"]
+	B [label="Criar k baldes vazios"]
+	C [label="Para cada elemento do vetor"]
+	D [label="Calcular índice do balde"]
+	E [label="Inserir elemento no balde correspondente"]
+	F [label="Ordenar cada balde (Insertion Sort)"]
+	G [label="Concatenar baldes em sequência"]
+	H [label=Fim]
+	A -> B
+	B -> C
+	C -> D
+	D -> E
+	E -> C [label="Próximo elemento?" style=dashed]
+	C -> F
+	F -> G
+	G -> H
+}

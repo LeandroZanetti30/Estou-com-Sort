@@ -11,7 +11,7 @@ from screens.algorithm import create_algorithm_buttons, draw_algorithm_screen
 from screens.about import draw_about_screen
 from screens.size_selection import handle_size_selection_events, draw_size_selection_screen
 from screens.report import show_report, save_report
-from algorithms import insertion_sort, selection_sort, bubble_sort, quick_sort, merge_sort
+from algorithms import insertion_sort, selection_sort, bubble_sort, quick_sort, merge_sort, bucket_sort, smooth_sort
 
 class SortingVisualizer:
     def __init__(self):
@@ -112,7 +112,9 @@ class SortingVisualizer:
             "Selection Sort": selection_sort,
             "Bubble Sort": bubble_sort,
             "Quick Sort": quick_sort,
-            "Merge Sort": merge_sort
+            "Merge Sort": merge_sort,
+            "Bucket Sort": bucket_sort,
+            "Smooth Sort": smooth_sort
         }
         
         sort_func = algorithm_map.get(name)
@@ -211,10 +213,15 @@ class SortingVisualizer:
                         duration = time.time() - self.sorting_start_time
                         self.show_report(
                             self.algorithm_name,
-                            "O(n²)" if self.algorithm_name in ["Insertion Sort", "Selection Sort", "Bubble Sort"] else "O(n log n)",
-                            "O(1)" if self.algorithm_name != "Merge Sort" else "O(n)",
-                            "Não" if self.algorithm_name == "Merge Sort" else "Sim",
-                            "Não" if self.algorithm_name in ["Selection Sort", "Quick Sort"] else "Sim",
+                            "O(n + k)" if self.algorithm_name == "Bucket Sort" else
+                            "O(n log n)" if self.algorithm_name in ["Quick Sort", "Merge Sort", "Smooth Sort"] else
+                            "O(n²)",
+                            "O(n + k)" if self.algorithm_name == "Bucket Sort" else
+                            "O(n)" if self.algorithm_name == "Merge Sort" else
+                            "O(log n)" if self.algorithm_name == "Quick Sort" else
+                            "O(1)",
+                            "Não" if self.algorithm_name in ["Merge Sort", "Bucket Sort"] else "Sim",
+                            "Não" if self.algorithm_name in ["Selection Sort", "Quick Sort", "Smooth Sort"] else "Sim",
                             self.vetor_original,  # Original
                             self.vector,          # Ordenado
                             duration
