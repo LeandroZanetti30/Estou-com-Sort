@@ -41,7 +41,7 @@ class SortingVisualizer:
         self.algorithm_buttons = create_algorithm_buttons(self.sort_with_timer)
         
         # Botão de pausa (visível apenas durante ordenação)
-        self.pause_button = Button("⏸ Pausar", WIDTH - 170, 20, 150, 40, self.toggle_pause)
+        self.pause_button = Button("⏸ Pausar", WIDTH - 180, HEIGHT - 70, 150, 40, self.toggle_pause)
         
         # Botão para selecionar velocidade (NO CANTO INFERIOR DIREITO)
         self.speed_button = Button(
@@ -196,43 +196,49 @@ class SortingVisualizer:
                 draw_size_selection_screen(self.screen, self.input_text, self.error_message, size_buttons)
                 
             elif self.current_screen == ALGORITHM_SCREEN:
-                draw_algorithm_screen(
-                    self.screen, self.vector, self.algorithm_buttons, 
-                    self.back_button, self.sorting_active, self.sorting_speed,
-                    self.comparisons, self.swaps, self.speed_button
-                )
+                # PRIMEIRO: sempre limpa a tela
+                self.screen.fill(BACKGROUND_COLOR)
                 
-                # Desenha botão de pausa se estiver ordenando
+                # SEGUNDO: se estiver ordenando, desenha as barras
                 if self.sorting_active:
+                    draw_bars(
+                        self.screen, 
+                        self.vector, 
+                        explanation=self.current_explanation
+                    )
+                    
+                    # TERCEIRO: desenha o botão de pause POR CIMA das barras
                     self.pause_button.draw(self.screen)
-                
-                # Execute sorting step by step
-                if self.sorting_active and not self.sorting_done and not self.paused:
-                    try:
-                        self.vector = next(self.sorting_generator)
-                        draw_bars(
-                            self.screen, 
-                            self.vector, 
-                            explanation=self.current_explanation
-                        )
-                    except StopIteration:
-                        self.sorting_done = True
-                        duration = time.time() - self.sorting_start_time
-                        self.show_report(
-                            self.algorithm_name,
-                            "O(n + k)" if self.algorithm_name == "Bucket Sort" else
-                            "O(n log n)" if self.algorithm_name in ["Quick Sort", "Merge Sort", "Smooth Sort"] else
-                            "O(n²)",
-                            "O(n + k)" if self.algorithm_name == "Bucket Sort" else
-                            "O(n)" if self.algorithm_name == "Merge Sort" else
-                            "O(log n)" if self.algorithm_name == "Quick Sort" else
-                            "O(1)",
-                            "Não" if self.algorithm_name in ["Merge Sort", "Bucket Sort"] else "Sim",
-                            "Não" if self.algorithm_name in ["Selection Sort", "Quick Sort", "Smooth Sort"] else "Sim",
-                            self.vetor_original,  # Original
-                            self.vector,          # Ordenado
-                            duration
-                        )
+                    
+                    # Executa a ordenação (se não estiver pausado)
+                    if not self.paused and not self.sorting_done:
+                        try:
+                            self.vector = next(self.sorting_generator)
+                        except StopIteration:
+                            self.sorting_done = True
+                            duration = time.time() - self.sorting_start_time
+                            self.show_report(
+                                self.algorithm_name,
+                                "O(n + k)" if self.algorithm_name == "Bucket Sort" else
+                                "O(n log n)" if self.algorithm_name in ["Quick Sort", "Merge Sort", "Smooth Sort"] else
+                                "O(n²)",
+                                "O(n + k)" if self.algorithm_name == "Bucket Sort" else
+                                "O(n)" if self.algorithm_name == "Merge Sort" else
+                                "O(log n)" if self.algorithm_name == "Quick Sort" else
+                                "O(1)",
+                                "Não" if self.algorithm_name in ["Merge Sort", "Bucket Sort"] else "Sim",
+                                "Não" if self.algorithm_name in ["Selection Sort", "Quick Sort", "Smooth Sort"] else "Sim",
+                                self.vetor_original,
+                                self.vector,
+                                duration
+                            )
+                else:
+                    # Se NÃO está ordenando, mostra a tela normal
+                    draw_algorithm_screen(
+                        self.screen, self.vector, self.algorithm_buttons, 
+                        self.back_button, self.sorting_active, self.sorting_speed,
+                        self.comparisons, self.swaps, self.speed_button
+                    )
                 
             elif self.current_screen == SPEED_SELECTION_SCREEN:
                 # Cria os botões de velocidade se necessário

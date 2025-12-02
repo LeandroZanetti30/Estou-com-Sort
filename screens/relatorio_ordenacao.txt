@@ -1,12 +1,12 @@
 Algoritmo utilizado: Insertion Sort
-Vetor original: [45, 99]
-Vetor ordenado: [45, 99]
+Vetor original: [1, 2]
+Vetor ordenado: [1, 2]
 
 Tempo teórico: O(n²)
 Espaço: O(1)
 In-situ: Sim
 Estável: Sim
-Tempo de execução: 9.05 segundos
+Tempo de execução: 7.76 segundos
 Comparações realizadas: 1
 Trocas realizadas: 0
 

@@ -52,15 +52,20 @@ def draw_text(surface, text, pos, size="medium", center=False, color=FONT_COLOR,
 
 
 def draw_bars(surface, arr, highlight=[], special_highlights={}, partition=None, explanation=""):
-    surface.fill(BACKGROUND_COLOR)
+    # REMOVA esta linha que limpa a tela:
+    # surface.fill(BACKGROUND_COLOR)
     
-    # Desenhar explicação atual
+    # Em vez disso, crie uma superfície temporária para as barras
+    bars_surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+    
+    # Desenhar explicação atual (na superfície temporária)
     if explanation:
-        pygame.draw.rect(surface, WHITE, (50, 30, WIDTH-100, 80), border_radius=BORDER_RADIUS)
-        pygame.draw.rect(surface, BLACK, (50, 30, WIDTH-100, 80), 2, border_radius=BORDER_RADIUS)
-        draw_text(surface, explanation, (60, 40), size="small", wrap_width=WIDTH-120)
+        pygame.draw.rect(bars_surface, WHITE, (50, 30, WIDTH-100, 80), border_radius=BORDER_RADIUS)
+        pygame.draw.rect(bars_surface, BLACK, (50, 30, WIDTH-100, 80), 2, border_radius=BORDER_RADIUS)
+        draw_text(bars_surface, explanation, (60, 40), size="small", wrap_width=WIDTH-120)
     
     if not arr:
+        surface.blit(bars_surface, (0, 0))
         return
     
     bar_width = (WIDTH - 100) // len(arr)
@@ -69,7 +74,7 @@ def draw_bars(surface, arr, highlight=[], special_highlights={}, partition=None,
     
     if partition:
         l, r = partition
-        pygame.draw.rect(surface, (230, 230, 250), 
+        pygame.draw.rect(bars_surface, (230, 230, 250), 
                         (50 + l * bar_width, 130, (r - l + 1) * bar_width, base_y - 130), 
                         border_radius=5)
     
@@ -85,7 +90,10 @@ def draw_bars(surface, arr, highlight=[], special_highlights={}, partition=None,
         else:
             color = BAR_COLOR
         
-        pygame.draw.rect(surface, color, (x + 2, y, bar_width - 4, height), border_radius=5)
+        pygame.draw.rect(bars_surface, color, (x + 2, y, bar_width - 4, height), border_radius=5)
         
         if bar_width > 30:
-            draw_text(surface, str(val), (x + bar_width//2, y - 25), size="tiny", center=True)
+            draw_text(bars_surface, str(val), (x + bar_width//2, y - 25), size="tiny", center=True)
+    
+    # Desenha as barras na tela principal
+    surface.blit(bars_surface, (0, 0))
