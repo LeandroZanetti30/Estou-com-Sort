@@ -10,6 +10,7 @@ from screens.input import handle_input_screen_events, draw_input_screen
 from screens.algorithm import create_algorithm_buttons, draw_algorithm_screen
 from screens.about import draw_about_screen
 from screens.size_selection import handle_size_selection_events, draw_size_selection_screen
+from screens.speed_selection import create_speed_selection_buttons, draw_speed_selection_screen
 from screens.report import show_report, save_report
 from algorithms import insertion_sort, selection_sort, bubble_sort, quick_sort, merge_sort, bucket_sort, smooth_sort
 
@@ -39,16 +40,31 @@ class SortingVisualizer:
         self.menu_buttons = create_menu_buttons(self.switch_screen, self.quit_app)
         self.algorithm_buttons = create_algorithm_buttons(self.sort_with_timer)
         
-        # Control buttons
-        #self.pause_button = Button("⏸ Pausar", WIDTH-250, 20, 100, 40, self.toggle_pause)
-        #self.step_button = Button("⏭ Passo", WIDTH-140, 20, 100, 40, self.do_step)
+        # Botão de pausa (visível apenas durante ordenação)
+        self.pause_button = Button("⏸ Pausar", WIDTH - 170, 20, 150, 40, self.toggle_pause)
+        
+        # Botão para selecionar velocidade (NO CANTO INFERIOR DIREITO)
+        self.speed_button = Button(
+            f"⚙ {self.sorting_speed}ms",  # Texto mais compacto
+            WIDTH - 170,  # Canto direito (170px da borda direita)
+            HEIGHT - 70,  # Canto inferior (70px da borda inferior)
+            150,  # Largura
+            40,   # Altura
+            lambda: self.switch_screen(SPEED_SELECTION_SCREEN),
+            (220, 220, 220)  # Cor cinza
+        )
+        
+        # Botões de seleção de velocidade
+        self.speed_buttons = []
 
     def switch_screen(self, screen_name):
         self.current_screen = screen_name
         self.sorting_active = False
         self.sorting_generator = None
+        self.sorting_done = False
         self.comparisons = 0
         self.swaps = 0
+        self.paused = False
         if screen_name != ALGORITHM_SCREEN:
             self.current_explanation = ""
 
@@ -60,17 +76,23 @@ class SortingVisualizer:
         sys.exit()
 
     def toggle_pause(self):
+        """Alterna entre pausado e continuar"""
         self.paused = not self.paused
-        #self.pause_button.text = "▶ Continuar" if self.paused else "⏸ Pausar"
+        self.pause_button.text = "▶ Continuar" if self.paused else "⏸ Pausar"
 
-    def do_step(self):
-        self.step_mode = True
+    def set_sorting_speed(self, new_speed):
+        """Define a nova velocidade de ordenação e atualiza o botão"""
+        self.sorting_speed = new_speed
+        self.speed_button.text = f"⚙ {new_speed}ms"  # Texto atualizado
+        self.switch_screen(ALGORITHM_SCREEN)
 
     def wait(self, delay=None):
+        """Função de espera com suporte a pausa"""
         if delay is None:
             delay = self.sorting_speed
         
-        if self.paused or self.step_mode:
+        if self.paused:
+            # Loop de espera enquanto pausado
             waiting = True
             while waiting:
                 for event in pygame.event.get():
@@ -78,15 +100,14 @@ class SortingVisualizer:
                         self.quit_app()
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                         self.toggle_pause()
-                    if event.type == pygame.MOUSEBUTTONDOWN and self.step_mode:
-                        waiting = False
+                        if not self.paused:
+                            waiting = False
+                    self.pause_button.check_click(event)
                 
+                # Desenha o botão de pausa durante a espera
                 self.pause_button.draw(self.screen)
-                self.step_button.draw(self.screen)
                 pygame.display.flip()
                 pygame.time.delay(100)
-            
-            self.step_mode = False
         
         pygame.time.delay(delay)
 
@@ -103,6 +124,7 @@ class SortingVisualizer:
         self.sorting_done = False
         self.comparisons = 0
         self.swaps = 0
+        self.paused = False  # Garante que não inicie pausado
         
         # SALVA UMA CÓPIA do vetor original ANTES de ordenar
         vetor_original = self.vector.copy()
@@ -166,20 +188,6 @@ class SortingVisualizer:
                 # Desenha a tela de input (apenas com campo de texto e botão Confirmar)
                 draw_input_screen(self.screen, self.input_text, self.error_message, self.back_button)
                 
-                # Tratamento de eventos
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        self.quit_app()
-                    
-                    # Atualiza o input_text e verifica cliques
-                    self.input_text, self.vector, self.error_message, _ = handle_input_screen_events(
-                        event,  # Passa o evento individual
-                        self.input_text, 
-                        self.vector, 
-                        self.switch_screen, 
-                        self.back_button
-                    )
-                
             elif self.current_screen == SIZE_SELECTION_SCREEN:
                 size_buttons = [
                     Button("Confirmar", WIDTH//2 - 100, 280, 200, 50, lambda: None, (100, 149, 237)),
@@ -191,13 +199,12 @@ class SortingVisualizer:
                 draw_algorithm_screen(
                     self.screen, self.vector, self.algorithm_buttons, 
                     self.back_button, self.sorting_active, self.sorting_speed,
-                    self.comparisons, self.swaps
+                    self.comparisons, self.swaps, self.speed_button
                 )
                 
-                # Draw control buttons if sorting is active
-                #if self.sorting_active:
-                #    self.pause_button.draw(self.screen)
-                #    self.step_button.draw(self.screen)
+                # Desenha botão de pausa se estiver ordenando
+                if self.sorting_active:
+                    self.pause_button.draw(self.screen)
                 
                 # Execute sorting step by step
                 if self.sorting_active and not self.sorting_done and not self.paused:
@@ -227,6 +234,21 @@ class SortingVisualizer:
                             duration
                         )
                 
+            elif self.current_screen == SPEED_SELECTION_SCREEN:
+                # Cria os botões de velocidade se necessário
+                if not self.speed_buttons:
+                    self.speed_buttons = create_speed_selection_buttons(
+                        self.sorting_speed, 
+                        self.set_sorting_speed
+                    )
+                
+                draw_speed_selection_screen(
+                    self.screen, 
+                    self.sorting_speed, 
+                    self.back_button, 
+                    self.speed_buttons
+                )
+                
             elif self.current_screen == ABOUT_SCREEN:
                 draw_about_screen(self.screen, self.back_button)
             
@@ -235,30 +257,30 @@ class SortingVisualizer:
                 if event.type == pygame.QUIT:
                     self.quit_app()
                 
+                # Tecla espaço para pausar/continuar (somente durante ordenação)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                    self.toggle_pause()
+                    if self.sorting_active:
+                        self.toggle_pause()
                 
                 if self.current_screen == MENU_SCREEN:
                     for btn in self.menu_buttons:
                         btn.check_click(event)
+                    self.back_button.check_click(event)
                 
                 elif self.current_screen == INPUT_SCREEN:
                     self.input_text, self.vector, self.error_message, _ = handle_input_screen_events(
-                        event, self.input_text, self.vector, self.switch_screen, [
-                            Button("Confirmar", WIDTH//2 - 150, 300, 300, 50, lambda: None, (100, 149, 237)),
-                            Button("Gerar Aleatório", WIDTH//2 - 150, 370, 300, 50, lambda: None, (60, 179, 113)),
-                            self.back_button
-                        ]
+                        event, self.input_text, self.vector, self.switch_screen, self.back_button
                     )
                 
                 elif self.current_screen == SIZE_SELECTION_SCREEN:
+                    size_buttons = [
+                        Button("Confirmar", WIDTH//2 - 100, 280, 200, 50, lambda: None, (100, 149, 237)),
+                        self.back_button
+                    ]
                     self.input_text, self.error_message, should_continue = handle_size_selection_events(
                         event, self.input_text, self.switch_screen, 
                         lambda v: setattr(self, 'vector', v),
-                        [
-                            Button("Confirmar", WIDTH//2 - 100, 280, 200, 50, lambda: None, (100, 149, 237)),
-                            self.back_button
-                        ]
+                        size_buttons
                     )
                     if not should_continue:
                         continue
@@ -271,10 +293,18 @@ class SortingVisualizer:
                     if not self.sorting_active:
                         for btn in self.algorithm_buttons:
                             btn.check_click(event)
+                        self.speed_button.check_click(event)
                     
-                    #if self.sorting_active:
-                    #    self.pause_button.check_click(event)
-                    #    self.step_button.check_click(event)
+                    # Botão de pausa (só funciona durante ordenação)
+                    if self.sorting_active:
+                        self.pause_button.check_click(event)
+                
+                elif self.current_screen == SPEED_SELECTION_SCREEN:
+                    self.back_button.check_click(event)
+                    for btn in self.speed_buttons:
+                        if btn.check_click(event):
+                            # O callback do botão já chama set_sorting_speed
+                            break
                 
                 elif self.current_screen == ABOUT_SCREEN:
                     self.back_button.check_click(event)

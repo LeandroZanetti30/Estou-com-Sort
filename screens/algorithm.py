@@ -28,30 +28,35 @@ def create_algorithm_buttons(sort_with_timer):
               (199, 21, 133)),  # Cor magenta/violeta
     ]
 
-def draw_algorithm_screen(surface, vector, buttons, back_button, sorting_active, sorting_speed, comparisons=0, swaps=0):
+def draw_algorithm_screen(surface, vector, algorithm_buttons, back_button, 
+                          sorting_active, sorting_speed, comparisons=0, swaps=0, speed_button=None):
+    """Tela de escolha do algoritmo"""
     surface.fill(BACKGROUND_COLOR)
     
     # Título
     draw_text(surface, "Escolha o Algoritmo de Ordenação", (WIDTH//2, 80), "large", True)
     
-    # Mostra vetor atual
+    # Informações do vetor
     if vector:
-        draw_text(surface, "Vetor atual:", (WIDTH//2, 120), "medium", True)
+        draw_text(surface, f"Vetor ({len(vector)} elementos):", (WIDTH//2, 120), "medium", True)
         draw_text(surface, " ".join(map(str, vector)), (WIDTH//2, 150), "small", True)
-    else:
-        draw_text(surface, "Nenhum vetor definido!", (WIDTH//2, 130), "medium", True, (200, 0, 0))
     
-    # Desenha botões dos algoritmos
-    for btn in buttons:
+    # Velocidade configurada (no canto superior direito)
+    draw_text(surface, f"Velocidade: {sorting_speed}ms", 
+             (WIDTH - 170, 70), "small", False, (70, 130, 180))
+    
+    # Mostra contadores se estiver ordenando
+    if sorting_active:
+        draw_text(surface, f"Comparações: {comparisons}, Trocas: {swaps}", 
+                 (WIDTH//2, 210), "small", True, (100, 100, 100))
+    
+    # Botão para alterar velocidade (canto inferior direito)
+    if not sorting_active and speed_button:
+        speed_button.draw(surface)
+    
+    # Botões dos algoritmos (mantidos no centro)
+    for btn in algorithm_buttons:
         btn.draw(surface)
     
+    # Botão de voltar (canto superior esquerdo)
     back_button.draw(surface)
-    
-    # Botões de controle
-    if sorting_active:
-        draw_text(surface, f"Velocidade: {sorting_speed}ms", (WIDTH-550, 30))
-        
-    # Mostra contadores de comparações e trocas durante a ordenação
-    if sorting_active:
-        draw_text(surface, f"Comparações: {comparisons}", (WIDTH-550, 60))
-        draw_text(surface, f"Trocas: {swaps}", (WIDTH-550, 90))

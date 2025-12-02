@@ -1,26 +1,14 @@
-Algoritmo utilizado: Smooth Sort
-Vetor original: [79, 1]
-Vetor ordenado: [1, 79]
+Algoritmo utilizado: Insertion Sort
+Vetor original: [45, 99]
+Vetor ordenado: [45, 99]
 
-Tempo teórico: O(n log n)
+Tempo teórico: O(n²)
 Espaço: O(1)
 In-situ: Sim
-Estável: Não
-Tempo de execução: 6.55 segundos
+Estável: Sim
+Tempo de execução: 9.05 segundos
 Comparações realizadas: 1
-Trocas realizadas: 1
+Trocas realizadas: 0
 
 Explicação do algoritmo:
-Smooth Sort é um algoritmo de ordenação adaptativo desenvolvido por Edsger Dijkstra. É uma variação do Heap Sort que usa uma sequência de números de Leonardo para criar uma floresta de heaps, tornando-o mais eficiente para dados parcialmente ordenados.
-
-Complexidade:
-- Pior caso: O(n log n)
-- Melhor caso: O(n) - quando os dados já estão ordenados
-- Caso médio: O(n log n)
-
-Características:
-- Não é estável: pode alterar a ordem de elementos iguais
-- In-situ: requer apenas uma quantidade constante de espaço adicional
-- Adaptável: mais eficiente com dados parcialmente ordenados
-- Baseado em números de Leonardo (L(0)=1, L(1)=1, L(n)=L(n-1)+L(n-2)+1)
-- Complexidade de caso ideal O(n) quando a entrada está quase ordenada
+Insertion Sort (Ordenação por Inserção) é um algoritmo simples que constrói a sequência ordenada um item de cada vez. Ele é eficiente para conjuntos de dados pequenos ou quase ordenados. Funciona como muitas pessoas ordenam cartas em um jogo de baralho - pega cada elemento e insere na posição correta entre os elementos já ordenados.Complexidade:- Pior caso: O(n²) - quando o vetor está em ordem inversa- Melhor caso: O(n) - quando o vetor já está ordenado- Caso médio: O(n²)Características:- Estável: mantém a ordem de elementos iguais- In-situ: requer apenas uma quantidade constante de espaço adicional- Adaptável: se beneficia de vetores parcialmente ordenados

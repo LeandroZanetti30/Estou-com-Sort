@@ -18,10 +18,12 @@ INPUT_SCREEN = "input"
 ALGORITHM_SCREEN = "algorithm"
 ABOUT_SCREEN = "about"
 SIZE_SELECTION_SCREEN = "size_selection"
+SPEED_SELECTION_SCREEN = "speed_selection"  # Novo
 
 # Configurações de ordenação
 MIN_VECTOR_SIZE = 2
 MAX_VECTOR_SIZE = 10
 DEFAULT_SPEED = 1100  # ms
 MIN_SPEED = 50
+MAX_SPEED = 2000
 SPEED_STEP = 50
